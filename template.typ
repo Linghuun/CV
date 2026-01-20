@@ -1,6 +1,72 @@
 #import "@preview/fontawesome:0.6.0"
 
-#let inner_margin = 1.2cm
+#let inner_margin = 1cm
+
+#let title_box(
+  title: "Title",
+  subtitle: none,
+  main_color,
+  title_bg_color,
+  title_color,
+  outset,
+  border
+) = {
+  [
+    #context {
+      let title = text(size: 14pt, smallcaps(title), fill: title_color)
+      let title_size = measure(title)
+      let poly = polygon(
+        fill: title_bg_color,
+        stroke: main_color + border,
+        (0pt - outset.left, 0pt - outset.top),
+        (title_size.width + title_size.height + outset.right, 0pt - outset.top),
+        (title_size.width + outset.right, title_size.height + outset.bottom),
+        (0pt - outset.left, title_size.height + outset.bottom),
+      )
+        block(
+          outset: outset,
+          width: 100%,
+        )[
+          #place(
+            top+left,
+            poly
+          )
+        #title
+        #h(13pt)
+        #subtitle
+        ]
+    }
+  ]
+}
+
+#let entry(
+  breakable: false,
+  title: "",
+  subtitle: "",
+  main_color: rgb("#AEC6CF").darken(30%),
+  title_bg_color: rgb("#AEC6CF"),
+  title_color: black,
+  bg_color: rgb("#AEC6CF"),
+  border: 1.5pt,
+  inset: (left : 5pt, right: 5pt, top: 5pt, bottom:5pt),
+  body: none,
+) = {
+  [
+    #context (
+      block(
+        breakable: breakable,
+        fill: bg_color,
+        stroke: main_color + border,
+        inset : inset,
+        [
+          #title_box(title: title, subtitle: subtitle, main_color, title_bg_color, title_color, (left : 5pt, right: 5pt, top: 5pt, bottom:5pt), border)
+          #body
+        ]
+      )
+    )
+  ]
+}
+
 
 #let contact_entries(entries) = {
   let res = ()
@@ -22,6 +88,27 @@
   )
 }
 
+#let education_entries(entries) = {
+  grid(
+    columns: (auto, auto),
+    gutter: 1em,
+    align: horizon,
+    ..for entry in entries {
+      (
+        align(center)[#text(size: 11pt, weight: "bold", entry.date)],
+        align(left + horizon)[#text(size: 13pt, weight: "bold", entry.formation)],
+        [],
+        box(inset: (top: -3pt, rest: 0pt),
+          align(left + horizon)[#text(size: 12pt, entry.school + " - " + emph(entry.city))]
+        ),
+        [],
+        box(inset: (top: -3pt, bottom: 2pt, rest: 0pt), entry.body)
+      )
+    }
+  )
+}
+
+
 #let resume(
   firstname: "",
   lastname: "",
@@ -39,7 +126,7 @@
       fill: color,
       block(
         height: 100%,
-        inset: (right: inner_margin/2, rest: inner_margin),
+        inset: (right: inner_margin/2, left :inner_margin/2, rest: inner_margin),
         {
           image(picture, width: 100%)
           align(center)[#text(size: 20pt, firstname + " " + lastname)]
