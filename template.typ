@@ -1,8 +1,26 @@
 #import "@preview/fontawesome:0.6.0"
 
-
-
 #let inner_margin = 1.2cm
+
+#let contact_entries(entries) = {
+  let res = ()
+  for entry in entries.keys() {
+    let key = entry
+    if entry.starts-with("fa-") {
+      entry = eval(entry + "()", scope: dictionary(fontawesome))
+    }
+    res.push(align(center)[#entry])
+    res.push({
+      set par(spacing: .4em)
+      set align(horizon)
+      entries.at(key)})
+  }
+  grid(
+    columns: (auto, auto),
+    gutter: 0.5em,
+    ..res
+  )
+}
 
 #let resume(
   firstname: "",
@@ -27,6 +45,7 @@
           align(center)[#text(size: 20pt, firstname + " " + lastname)]
           align(center)[#text(size: 15pt, actual)]
           side
+          
         }
         
       )

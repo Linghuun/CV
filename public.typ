@@ -7,7 +7,15 @@
   picture: "public.png",
   side:
     [
-      nothing here
+      = Contact
+
+      #contact_entries(
+        (
+          emoji.mail : link("mailto:...")[nothing\@mail.fr],
+          fa-github : link("https://github.com/Linghuun")[Linghuun],
+          fa-discord : [pseudo]
+        )
+      )
     ]
 )
 
