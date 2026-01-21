@@ -75,15 +75,16 @@
     if entry.starts-with("fa-") {
       entry = eval(entry + "()", scope: dictionary(fontawesome))
     }
+    
     res.push(align(center)[#entry])
     res.push({
-      set par(spacing: .4em)
       set align(horizon)
       entries.at(key)})
   }
   grid(
     columns: (auto, auto),
-    gutter: 0.5em,
+    column-gutter: 0.5em,
+    row-gutter: 0.7em,
     ..res
   )
 }
