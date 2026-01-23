@@ -1,6 +1,6 @@
 #import "@preview/fontawesome:0.6.0"
 
-#let inner_margin = 1cm
+#let inner_margin = 0.8cm
 
 #let title_box(
   title: "Title",
@@ -13,7 +13,7 @@
 ) = {
   [
     #context {
-      let title = text(size: 14pt, smallcaps(title), fill: title_color)
+      let title = text(weight: "semibold", size: 14pt, smallcaps(title), fill: title_color)
       let title_size = measure(title)
       let poly = polygon(
         fill: title_bg_color,
@@ -136,8 +136,9 @@
   side: [],
   body
 ) = {
-  set page(margin: 0pt)
+  set page(margin: 0pt, paper: "a4")
   set text(hyphenate: false)
+  set text(font: "Source Sans Pro")
   grid(
     columns: (1fr, 2fr),
     grid.cell(
@@ -146,9 +147,9 @@
         height: 100%,
         inset: (right: inner_margin/2, left :inner_margin/2, rest: inner_margin),
         {
+          align(center)[#text(weight: "bold", size: 20pt, firstname + " " + lastname)]
           image(picture, width: 100%)
-          align(center)[#text(size: 20pt, firstname + " " + lastname)]
-          align(center)[#text(size: 15pt, actual)]
+          align(center)[#text(weight: "bold", size: 15pt, actual)]
           side
           
         }
