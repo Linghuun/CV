@@ -75,7 +75,6 @@
     if entry.starts-with("fa-") {
       entry = eval(entry + "()", scope: dictionary(fontawesome))
     }
-    
     res.push(align(center)[#entry])
     res.push({
       set align(horizon)
@@ -95,16 +94,34 @@
     gutter: 1em,
     align: horizon,
     ..for entry in entries {
+      let school = entry.at("school", default: "")
+      let city = entry.at("city", default: "")
+      let has_details = school != "" or city != ""
+
       (
+        // First row
         align(center)[#text(size: 11pt, weight: "bold", entry.date)],
         align(left + horizon)[#text(size: 13pt, weight: "bold", entry.formation)],
+
+        // Second row (optional)
+        ..(if has_details {
+          (
+            [], // Empty cell for the first column
+            box(inset: (top: -3pt, rest: 0pt))[
+              #text(size: 12pt, school + " - " + emph(city))
+            ]
+          )
+        }),
+
+        // Third row
         [],
-        box(inset: (top: -3pt, rest: 0pt),
-          align(left + horizon)[#text(size: 12pt, entry.school + " - " + emph(entry.city))]
-        ),
+        box(inset: (top: -3pt, bottom: -4pt, rest: 0pt), entry.body),
+
+        // Fourth "row" (to separate 2 entries)
         [],
-        box(inset: (top: -3pt, bottom: 2pt, rest: 0pt), entry.body)
+        []
       )
+
     }
   )
 }
