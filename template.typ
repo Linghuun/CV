@@ -10,32 +10,25 @@
   title_color,
   outset,
   border
-) = {
-  [
-    #context {
-      let title = text(weight: "semibold", size: 14pt, smallcaps(title), fill: title_color)
-      let title_size = measure(title)
-      let poly = polygon(
-        fill: title_bg_color,
-        stroke: main_color + border,
-        (0pt - outset.left, 0pt - outset.top),
-        (title_size.width + title_size.height + outset.right, 0pt - outset.top),
-        (title_size.width + outset.right, title_size.height + outset.bottom),
-        (0pt - outset.left, title_size.height + outset.bottom),
-      )
-        block(
-          outset: outset,
-          width: 100%,
-        )[
-          #place(
-            top+left,
-            poly
-          )
-        #title
-        #h(13pt)
-        #subtitle
-        ]
-    }
+) = context {
+  let title = text(weight: "semibold", size: 14pt, smallcaps(title), fill: title_color)
+  let title_size = measure(title)
+  let poly = polygon(
+    fill: title_bg_color,
+    stroke: main_color + border,
+    (0pt - outset.left, 0pt - outset.top),
+    (title_size.width + title_size.height + outset.right, 0pt - outset.top),
+    (title_size.width + outset.right, title_size.height + outset.bottom),
+    (0pt - outset.left, title_size.height + outset.bottom),
+  )
+  block(
+    outset: outset,
+    width: 100%,
+  )[
+    #place(top+left, poly)
+    #title
+    #h(13pt)
+    #subtitle
   ]
 }
 
@@ -51,9 +44,7 @@
   inset: (left : 5pt, right: 5pt, top: 5pt, bottom:5pt),
   body: none,
 ) = {
-  [
-    #context (
-      block(
+  block(
         breakable: breakable,
         fill: bg_color,
         stroke: main_color + border,
@@ -63,10 +54,7 @@
           #body
         ]
       )
-    )
-  ]
 }
-
 
 #let contact_entries(entries) = {
   let res = ()
@@ -133,6 +121,7 @@
   actual: "",
   picture: "",
   color: rgb("#AEC6CF"),
+  disable_top_margin: false,
   side: [],
   body
 ) = {
@@ -145,7 +134,8 @@
       fill: color,
       block(
         height: 100%,
-        inset: (right: inner_margin/2, left :inner_margin/2, rest: inner_margin),
+        inset: (bottom: 0em, top: inner_margin, rest: inner_margin/2),
+        
         {
           align(center)[#text(weight: "bold", size: 20pt, firstname + " " + lastname)]
           image(picture, width: 100%)
@@ -160,7 +150,13 @@
       fill: color.lighten(85%),
       block(
         height: 100%,
-        inset: (left: inner_margin/2, rest: inner_margin),
+        inset:
+        (
+          bottom: 0em,
+          top: if disable_top_margin {0em} else {inner_margin},
+          // without top margin, the user need to set up his own inside the body
+          rest: inner_margin/2
+        ),
         {
           body
         }
